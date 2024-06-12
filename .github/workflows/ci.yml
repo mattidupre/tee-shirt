@@ -20,14 +20,14 @@ jobs:
         node-version: [20]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
           cache: pnpm
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
 
   test:
     name: Run tests
