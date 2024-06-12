@@ -1,6 +1,7 @@
 name: Setup
 inputs:
    node-version:
+     default: 20
      required: true
      description: "The aws-access-key-id used to authenticate with AWS"
 runs:
