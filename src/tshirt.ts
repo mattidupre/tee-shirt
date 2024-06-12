@@ -52,11 +52,21 @@ type SizeNumberTuple<TNumber extends SizeNumber> = IntegerRangeTuple<
 IntegerAdd<TNumber, 1>
 >;
 
+/**
+ * Encompasses all possible Tshirt sizes.
+ */
 export type TshirtSizeGeneric =
   | `${Exclude<SizeNumber, 1>}xs`
   | BaseSizes[number]
   | `${Exclude<SizeNumber, 1>}xl`;
 
+/**
+ * Extract number and size from a Tshirt size. Number is 1 for sm, md, lg, etc.
+ * Optionally provide expected Min and Max to assert number is within range.
+ * @example parseTshirtSize('3xl'); // { number: 3, size: 'xl' }
+ * @example parseTshirtSize('md'); // { number: 1, size: 'md' }
+ * @example parseTshirtSize('3xl', 2); // throws
+ */
 export const parseTshirtSize = <
   TNumberMin extends SizeNumber = typeof MAX_SIZE_NUMBER,
   TNumberMax extends SizeNumber = TNumberMin,
@@ -91,6 +101,13 @@ export const parseTshirtSize = <
   ];
 };
 
+/**
+ * Create a tuple representing possible sizes sorted from small to large.
+ * Optionally provide min and max to limit range.
+ * @example CreateTshirtSizeTuple // ['xs', 'sm', 'md', 'lg', 'xl']
+ * @example CreateTshirtSizeTuple<2> // ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']
+ * @example CreateTshirtSizeTuple<1, 2> // ['xs', 'sm', 'md', 'lg', 'xl', '2xl']
+ */
 export type CreateTshirtSizeTuple<
   TNumberMin extends SizeNumber = 1,
   TNumberMax extends SizeNumber = TNumberMin,
@@ -100,11 +117,21 @@ export type CreateTshirtSizeTuple<
   ...SuffixTupleValues<WritableTuple<SizeNumberTuple<TNumberMax>>, 'xl'>,
 ];
 
+/**
+ * Same as {@link CreateTshirtSizeTuple} but returns a union of sizes.
+ */
 export type CreateTshirtSize<
   TNumberMin extends SizeNumber = 1,
   TNumberMax extends SizeNumber = TNumberMin,
 > = CreateTshirtSizeTuple<TNumberMin, TNumberMax>[number];
 
+/**
+ * Create a tuple representing possible sizes sorted from small to large.
+ * Optionally provide min and max to limit range.
+ * @example createTshirtSizes(); // ['xs', 'sm', 'md', 'lg', 'xl']
+ * @example createTshirtSizes(2); // ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']
+ * @example createTshirtSizes(1, 2); // ['xs', 'sm', 'md', 'lg', 'xl', '2xl']
+ */
 export const createTshirtSizes = <
   TNumberMin extends SizeNumber = 1,
   TNumberMax extends SizeNumber = TNumberMin,
@@ -130,6 +157,21 @@ export const createTshirtSizes = <
   >;
 };
 
+/**
+ * Given a tuple of sizes, create another tuple representing possible ranges.
+ * @example TshirtSizesToRanges<['sm', 'md', 'lg']>;
+ * // [
+ * // 'max-sm',
+ * // 'sm-md',
+ * // 'sm-lg',
+ * // 'min-sm',
+ * // 'max-md',
+ * // 'md-lg',
+ * // 'min-md',
+ * // 'max-lg',
+ * // 'min-lg',
+ * // ]
+ */
 export type TshirtSizesToRanges<
   TTuple extends readonly TshirtSizeGeneric[],
 > = TTuple extends readonly [
@@ -150,6 +192,21 @@ export type TshirtSizesToRanges<
   ]
   : []; // eslint-disable-line @typescript-eslint/ban-types
 
+/**
+ * Given a tuple of sizes, create another tuple representing possible ranges.
+ * @example tshirtSizesToRanges(['sm', 'md', 'lg']);
+ * // [
+ * // 'max-sm',
+ * // 'sm-md',
+ * // 'sm-lg',
+ * // 'min-sm',
+ * // 'max-md',
+ * // 'md-lg',
+ * // 'min-md',
+ * // 'max-lg',
+ * // 'min-lg',
+ * // ]
+ */
 export const tshirtSizesToRanges = <
   TTuple extends readonly TshirtSizeGeneric[],
 >(
@@ -169,6 +226,9 @@ export const tshirtSizesToRanges = <
   ] as TshirtSizesToRanges<TTuple>;
 };
 
+/**
+ * Encompasses all possible Tshirt ranges.
+ */
 export type TshirtRangeGeneric = keyof {
   [T in TshirtSizeGeneric as
   | `max-${T}`
@@ -176,7 +236,10 @@ export type TshirtRangeGeneric = keyof {
   | `min-${T}`]: any;
 };
 
-const parseRange = (
+/**
+ * Given a tuple of sizes and a range, return the beginning and end indexes of that range.
+ */
+export const tshirtRangeToIndexes = (
   allSizes: readonly TshirtSizeGeneric[],
   range: TshirtRangeGeneric,
 ): [number, number] => {
@@ -204,7 +267,10 @@ const parseRange = (
   return [fromIndex, toIndex];
 };
 
-export const tshirtRangesToSteps = <
+/**
+ * Given a tuple of sizes and a range, return an array of all matching sizes.
+ */
+export const tshirtRangesToSizes = <
   TTshirtSizes extends readonly TshirtSizeGeneric[],
 >(
   allSizes: TTshirtSizes,
@@ -212,7 +278,7 @@ export const tshirtRangesToSteps = <
 ): Array<TTshirtSizes[number]> => {
   const stepIndexes = new Set<number>();
   for (const range of tshirtRanges) {
-    const [fromIndex, toIndex] = parseRange(
+    const [fromIndex, toIndex] = tshirtRangeToIndexes(
       allSizes,
       range,
     );

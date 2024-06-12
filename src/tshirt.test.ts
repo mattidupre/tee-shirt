@@ -4,7 +4,7 @@ import {
   createTshirtSizes,
   parseTshirtSize,
   tshirtSizesToRanges,
-  tshirtRangesToSteps,
+  tshirtRangesToSizes,
 } from './tshirt.js';
 
 test('createTshirtSizes', () => {
@@ -69,23 +69,23 @@ test('tshirtSizesToRanges', () => {
     ]);
 });
 
-test('tshirtRangesToSteps', () => {
+test('tshirtRangesToSizes', () => {
   const BASE_SIZES = Object.freeze(createTshirtSizes(3));
 
-  expect.soft(tshirtRangesToSteps(BASE_SIZES, ['sm-md'])).toEqual(['sm', 'md']);
+  expect.soft(tshirtRangesToSizes(BASE_SIZES, ['sm-md'])).toEqual(['sm', 'md']);
   expect
-    .soft(tshirtRangesToSteps(BASE_SIZES, ['3xs-sm']))
+    .soft(tshirtRangesToSizes(BASE_SIZES, ['3xs-sm']))
     .toEqual(['3xs', '2xs', 'xs', 'sm']);
   expect
-    .soft(tshirtRangesToSteps(BASE_SIZES, ['3xs-sm', 'lg-3xl']))
+    .soft(tshirtRangesToSizes(BASE_SIZES, ['3xs-sm', 'lg-3xl']))
     .toEqual(['3xs', '2xs', 'xs', 'sm', 'lg', 'xl', '2xl', '3xl']);
   expect
-    .soft(tshirtRangesToSteps(BASE_SIZES, ['md-lg', 'xs-md']))
+    .soft(tshirtRangesToSizes(BASE_SIZES, ['md-lg', 'xs-md']))
     .toEqual(['xs', 'sm', 'md', 'lg']);
   expect
-    .soft(tshirtRangesToSteps(BASE_SIZES, ['max-md']))
+    .soft(tshirtRangesToSizes(BASE_SIZES, ['max-md']))
     .toEqual(['3xs', '2xs', 'xs', 'sm', 'md']);
   expect
-    .soft(tshirtRangesToSteps(BASE_SIZES, ['min-md']))
+    .soft(tshirtRangesToSizes(BASE_SIZES, ['min-md']))
     .toEqual(['md', 'lg', 'xl', '2xl', '3xl']);
 });
