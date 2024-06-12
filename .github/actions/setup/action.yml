@@ -1,4 +1,5 @@
 name: Setup
+shell: bash
 inputs:
    node-version:
      required: true
