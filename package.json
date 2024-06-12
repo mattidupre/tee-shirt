@@ -7,6 +7,7 @@
     "node": ">=20",
     "pnpm": ">=8"
   },
+  "sideEffects": false,
   "exports": {
     "./*": {
       "import": "./dist/*.js",
@@ -21,8 +22,11 @@
   },
   "scripts": {
     "build": "tsc --declaration",
+    "clean": "rm -rf dist",
     "lint": "xo",
-    "dev": "tsc --declaration --preservewatchoutput --watch",
-    "test": "vitest"
+    "check-types": "tsc",
+    "dev": "tsc --declaration --watch",
+    "test": "vitest",
+    "prepublishOnly": "pnpm clean && pnpm run build"
   }
 }
