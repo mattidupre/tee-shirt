@@ -24,32 +24,31 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v4
+      - name: Setup pnpm installation
+        uses: pnpm/action-setup@v4
         with:
           version: 8
-
+          run_install: false
       - name: Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm ci --frozen-lockfile
 
   test:
     name: Run tests
     runs-on: ubuntu-latest
     needs: [setup]
     steps:
-      - name: Install dependencies
-        run: pnpm ci --frozen-lockfile
-      - name: Run tests
-        run: pnpm run test
+      - run: pnpm run test
 
   lint:
     name: Run lint check
