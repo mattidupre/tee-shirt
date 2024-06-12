@@ -1,0 +1,28 @@
+{
+  "type": "module",
+  "name": "tee-shirt",
+  "version": "0.0.0",
+  "license": "Unlicense",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=8"
+  },
+  "exports": {
+    "./*": {
+      "import": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "xo": "^0.58.0"
+  },
+  "scripts": {
+    "build": "tsc --declaration",
+    "lint": "xo",
+    "dev": "tsc --declaration --preservewatchoutput --watch",
+    "test": "vitest"
+  }
+}
