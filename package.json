@@ -22,7 +22,8 @@
   "scripts": {
     "build": "tsc --declaration",
     "lint": "xo",
-    "dev": "tsc --declaration --preservewatchoutput --watch",
+    "check-types": "tsc",
+    "dev": "tsc --declaration --watch",
     "test": "vitest"
   }
 }

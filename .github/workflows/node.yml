@@ -1,0 +1,74 @@
+name: Node CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Run tests on supported Node.js versions
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # See supported Node.js versions at https://nodejs.org/en/about/previous-releases
+        node-version: [18, 20, 21]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm ci --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm run test
+
+  lint:
+    name: Check file linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm ci --frozen-lockfile
+
+      - name: Check file linting
+        run: pnpm run lint
+
+  check-types:
+    name: Check type definitions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm ci --frozen-lockfile
+
+      - name: Check type definitions
+        run: pnpm run check-types
