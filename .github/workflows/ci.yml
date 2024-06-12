@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: setup
-        uses: ./.github/actions/setup
+        uses: ./.github/actions/setup.yml
         with:
           node-version: 20
       - run: pnpm run test
