@@ -41,7 +41,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
-        run: pnpm ci --frozen-lockfile
+        run: pnpm ci
 
   test:
     name: Run tests
