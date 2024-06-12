@@ -13,7 +13,7 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: ./setup@v1
+      - uses: ./setup.yml@v1
       - run: pnpm run test
 
   # lint:
