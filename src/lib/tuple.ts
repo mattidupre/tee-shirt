@@ -1,4 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-types */
+export type TupleIndexOf<TTuple extends readonly unknown[], TValue extends TTuple[number]> =
+  TTuple extends readonly [...infer THead, infer T]
+    ? T extends TValue ? THead['length'] : TupleIndexOf<THead, TValue>
+    : never;
 
 /**
  * @private

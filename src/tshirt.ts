@@ -1,9 +1,9 @@
-import {type ReverseTuple, type SuffixTupleValues, type WritableTuple} from './types/tuple.js';
+import {type ReverseTuple, type SuffixTupleValues, type WritableTuple} from './lib/tuple.js';
 import type {
   IntegerRange,
   IntegerRangeTuple,
   IntegerAdd,
-} from './types/integer';
+} from './lib/integer.js';
 
 const BASE_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
@@ -190,7 +190,7 @@ export type TshirtSizesToRanges<
       `min-${T}`,
       ...TshirtSizesToRanges<TRest>,
   ]
-  : []; // eslint-disable-line @typescript-eslint/ban-types
+  : [];  
 
 /**
  * Given a tuple of sizes, create another tuple representing possible ranges.

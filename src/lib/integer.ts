@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 import type {TupleValue, SliceTuple} from './tuple.js';
 
 /**

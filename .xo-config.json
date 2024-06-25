@@ -1,6 +1,15 @@
 {
   "space": true,
   "rules": {
-    "@typescript-eslint/naming-convention": "off"
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "[]": false
+        },
+        "extendDefaults": true
+      }
+    ]
   }
 }
