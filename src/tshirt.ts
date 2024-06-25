@@ -190,7 +190,7 @@ export type TshirtSizesToRanges<
       `min-${T}`,
       ...TshirtSizesToRanges<TRest>,
   ]
-  : [];  
+  : [];
 
 /**
  * Given a tuple of sizes, create another tuple representing possible ranges.

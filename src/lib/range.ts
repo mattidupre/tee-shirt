@@ -1,6 +1,7 @@
 import {
   type SizeRange, type Size, type AnySize,
   type DefaultSizeRange,
+  ALL_SIZES,
 } from './size.js';
 
 export type TshirtRangeSimple<TRange extends SizeRange = DefaultSizeRange> =
@@ -41,10 +42,40 @@ const rangeStringToRangeIndexes = (
   return [fromIndex, toIndex];
 };
 
+// Export const isRangeMax = (rangeString: TshirtRange) => rangeString.startsWith('max-');
+
+// export const isRangeMin = (rangeString: TshirtRange) => rangeString.startsWith('min-');
+
+const singleRangeToSizes = <TSize extends AnySize>(
+  allSizes: readonly TSize[],
+  rangeString: TSize | TshirtRange,
+) => {
+  if (allSizes.includes(rangeString as TSize)) {
+    return [rangeString] as TSize[];
+  }
+
+  const [fromIndex, toIndex] = rangeStringToRangeIndexes(allSizes, rangeString as TshirtRange);
+  return allSizes.slice(fromIndex, toIndex + 1);
+};
+
 export const rangeToSizes = <TSize extends AnySize>(
   allSizes: readonly TSize[],
-  rangeString: TshirtRange,
+  ...rangeStrings: ReadonlyArray<TSize | TshirtRange>
 ) => {
-  const [fromIndex, toIndex] = rangeStringToRangeIndexes(allSizes, rangeString);
-  return allSizes.slice(fromIndex, toIndex + 1);
+  if (rangeStrings.length === 0) {
+    return [];
+  }
+
+  if (rangeStrings.length === 1) {
+    return singleRangeToSizes(allSizes, rangeStrings[0]);
+  }
+
+  const allMatchedSizes = new Set<TSize>();
+  for (const rangeString of rangeStrings) {
+    for (const size of singleRangeToSizes(allSizes, rangeString)) {
+      allMatchedSizes.add(size);
+    }
+  }
+
+  return ALL_SIZES.filter(size => allMatchedSizes.has(size as TSize));
 };

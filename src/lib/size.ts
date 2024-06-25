@@ -18,7 +18,8 @@ const MIN_SIZE: MinSize = ALL_SIZES[0];
 
 type MaxSize = AllSizes extends readonly [...readonly any[], infer T] ? T : never;
 
-const MAX_SIZE = ALL_SIZES.at(-1) as MaxSize;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+const MAX_SIZE = (ALL_SIZES as any).at(-1) as MaxSize;
 
 export type DefaultSizeRange = readonly [MinSize, MaxSize];
 
