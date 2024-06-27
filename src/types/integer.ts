@@ -20,8 +20,8 @@ export type IntegerRange<
   TNumber1 extends number,
   TNumber2 extends number,
 > = Exclude<
-TupleValue<_IntegerTuple<TNumber2>>,
-TupleValue<_IntegerTuple<TNumber1>>
+  TupleValue<_IntegerTuple<TNumber2>>,
+  TupleValue<_IntegerTuple<TNumber1>>
 >;
 
 /**
@@ -40,4 +40,4 @@ export type IntegerAdd<TNumber1 extends number, TNumber2 extends number> = [
   ..._IntegerTuple<TNumber1>,
   ..._IntegerTuple<TNumber2>,
 ]['length'] &
-number;
+  number;

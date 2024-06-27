@@ -58,10 +58,10 @@ export type SuffixTupleValues<
   TSuffix extends string | number | bigint,
 > = TTuple extends readonly [...any[]]
   ? {
-    [K in keyof TTuple]: TTuple[K] extends number | string | bigint
-      ? `${TTuple[K]}${TSuffix}`
-      : TTuple[K];
-  }
+      [K in keyof TTuple]: TTuple[K] extends number | string | bigint
+        ? `${TTuple[K]}${TSuffix}`
+        : TTuple[K];
+    }
   : never;
 
 /**
@@ -72,10 +72,10 @@ export type PrefixTupleValues<
   TPrefix extends string | number | bigint,
 > = TTuple extends readonly [...any[]]
   ? {
-    [K in keyof TTuple]: TTuple[K] extends number | string | bigint
-      ? `${TPrefix}${TTuple[K]}`
-      : TTuple[K];
-  }
+      [K in keyof TTuple]: TTuple[K] extends number | string | bigint
+        ? `${TPrefix}${TTuple[K]}`
+        : TTuple[K];
+    }
   : never;
 
 /**
