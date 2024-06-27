@@ -1,5 +1,8 @@
 import {
-  type TshirtBounds, type TshirtSize, type TshirtTupleToBounds, safeParseTshirtSizes,
+  type TshirtBounds,
+  type TshirtSize,
+  type TshirtTupleToBounds,
+  safeParseTshirtSizes,
   createTshirtTuple,
   isTshirtSize,
   tshirtTupleToBounds,
@@ -26,16 +29,23 @@ export type TshirtRangeOptions = {
  *  TshirtRangeSimple // `${TshirtSize}-${TshirtSize}`
  *  TshirtRangeSimple<['sm', 'lg']> // 'sm-md' | 'sm-lg' | 'md-lg'
  */
-export type TshirtRangeSimple<TBounds extends TshirtBounds = never> =
-[TBounds] extends [never] ? `${TshirtSize}-${TshirtSize}` :
-  keyof {
-    [P in TshirtPairs<TBounds> as `${P[0]}-${P[1]}`]: any
-  };
+export type TshirtRangeSimple<TBounds extends TshirtBounds = never> = [
+  TBounds,
+] extends [never]
+  ? `${TshirtSize}-${TshirtSize}`
+  : keyof {
+      [P in TshirtPairs<TBounds> as `${P[0]}-${P[1]}`]: any;
+    };
 
 /**
  * Checks if a value is of type {@link TshirtRangeSimple}.
  */
-export const isTshirtRangeSimple = <TAllSizes extends readonly TshirtSize[] = never>(value: any, allSizes?: TAllSizes): value is TshirtRangeSimple<TshirtTupleToBounds<TAllSizes>> => {
+export const isTshirtRangeSimple = <
+  TAllSizes extends readonly TshirtSize[] = never,
+>(
+  value: any,
+  allSizes?: TAllSizes,
+): value is TshirtRangeSimple<TshirtTupleToBounds<TAllSizes>> => {
   if (typeof value !== 'string') {
     return false;
   }
@@ -64,12 +74,18 @@ export const isTshirtRangeSimple = <TAllSizes extends readonly TshirtSize[] = ne
  *  TshirtRangeMin // `min-${TshirtSize}`
  *  TshirtRangeMin<['sm', 'lg']> // 'min-sm' | 'min-md' | 'min-lg'
  */
-export type TshirtRangeMin<TRange extends TshirtBounds = never> = `min-${TshirtSize<TRange>}`;
+export type TshirtRangeMin<TRange extends TshirtBounds = never> =
+  `min-${TshirtSize<TRange>}`;
 
 /**
  * Checks if a value is of type {@link TshirtRangeMin}.
  */
-export const isTshirtRangeMin = <TAllSizes extends readonly TshirtSize[] = never>(value: any, allSizes?: TAllSizes): value is TshirtRangeMin<TshirtTupleToBounds<TAllSizes>> => {
+export const isTshirtRangeMin = <
+  TAllSizes extends readonly TshirtSize[] = never,
+>(
+  value: any,
+  allSizes?: TAllSizes,
+): value is TshirtRangeMin<TshirtTupleToBounds<TAllSizes>> => {
   if (typeof value !== 'string') {
     return false;
   }
@@ -93,12 +109,18 @@ export const isTshirtRangeMin = <TAllSizes extends readonly TshirtSize[] = never
  *  TshirtRangeMin // `max-${TshirtSize}`
  *  TshirtRangeMax<['sm', 'lg']> // 'max-sm' | 'max-md' | 'max-lg'
  */
-export type TshirtRangeMax<TRange extends TshirtBounds = never> = `max-${TshirtSize<TRange>}`;
+export type TshirtRangeMax<TRange extends TshirtBounds = never> =
+  `max-${TshirtSize<TRange>}`;
 
 /**
  * Checks if a value is of type {@link TshirtRangeMax}.
  */
-export const isTshirtRangeMax = <TAllSizes extends readonly TshirtSize[] = never>(value: any, allSizes?: TAllSizes): value is TshirtRangeMax<TshirtTupleToBounds<TAllSizes>> => {
+export const isTshirtRangeMax = <
+  TAllSizes extends readonly TshirtSize[] = never,
+>(
+  value: any,
+  allSizes?: TAllSizes,
+): value is TshirtRangeMax<TshirtTupleToBounds<TAllSizes>> => {
   if (typeof value !== 'string') {
     return false;
   }
@@ -126,21 +148,24 @@ export const isTshirtRangeMax = <TAllSizes extends readonly TshirtSize[] = never
  * If bounds are provided it will limit those sizes.
  */
 export type TshirtRange<TRange extends TshirtBounds = never> =
-  'all' |
-  'none' |
-  TshirtSize<TRange> |
-  TshirtRangeSimple<TRange> |
-  TshirtRangeMin<TRange> |
-  TshirtRangeMax<TRange>;
+  | 'all'
+  | 'none'
+  | TshirtSize<TRange>
+  | TshirtRangeSimple<TRange>
+  | TshirtRangeMin<TRange>
+  | TshirtRangeMax<TRange>;
 
 /**
  * Checks if a value is of type {@link TShirtRange}.
  */
-export const isTshirtRange = <TAllSizes extends readonly TshirtSize[] = never>(value: any, allSizes?: TAllSizes): value is TshirtRange<TshirtTupleToBounds<TAllSizes>> =>
-  isTshirtSize(value, allSizes && tshirtTupleToBounds(allSizes))
-  || isTshirtRangeSimple(value, allSizes)
-  || isTshirtRangeMin(value, allSizes)
-  || isTshirtRangeMax(value, allSizes);
+export const isTshirtRange = <TAllSizes extends readonly TshirtSize[] = never>(
+  value: any,
+  allSizes?: TAllSizes,
+): value is TshirtRange<TshirtTupleToBounds<TAllSizes>> =>
+  isTshirtSize(value, allSizes && tshirtTupleToBounds(allSizes)) ||
+  isTshirtRangeSimple(value, allSizes) ||
+  isTshirtRangeMin(value, allSizes) ||
+  isTshirtRangeMax(value, allSizes);
 
 /**
  * Convert a single Tshirt size range to an index range.
@@ -173,13 +198,17 @@ const _rangeToIndexRange = (
     throw new TypeError(`Invalid range "${rangeString}".`);
   }
 
-  if (options.exclusiveLeft === true
-    || (options.exclusiveMin === true && isTshirtRangeMin(rangeString))) {
+  if (
+    options.exclusiveLeft === true ||
+    (options.exclusiveMin === true && isTshirtRangeMin(rangeString))
+  ) {
     fromIndex += 1;
   }
 
-  if (options.exclusiveRight === true
-    || (options.exclusiveMax === true && isTshirtRangeMax(rangeString))) {
+  if (
+    options.exclusiveRight === true ||
+    (options.exclusiveMax === true && isTshirtRangeMax(rangeString))
+  ) {
     toIndex -= 1;
   }
 
@@ -189,7 +218,7 @@ const _rangeToIndexRange = (
 /**
  * Convert a single range to the respective sizes in the provided Tshirt size array.
  * @private
-*/
+ */
 const _singleRangeToSizes = <TSize extends TshirtSize>(
   allSizes: readonly TSize[],
   rangeString: TshirtRange,
@@ -207,7 +236,11 @@ const _singleRangeToSizes = <TSize extends TshirtSize>(
     return [];
   }
 
-  const [fromIndex, toIndex] = _rangeToIndexRange(allSizes, rangeString, options);
+  const [fromIndex, toIndex] = _rangeToIndexRange(
+    allSizes,
+    rangeString,
+    options,
+  );
 
   return allSizes.slice(fromIndex, toIndex + 1);
 };
@@ -235,7 +268,7 @@ const _singleRangeToSizes = <TSize extends TshirtSize>(
  *     // ['sm', 'md']
  *   tshirtRangeToSizes(SIZES, { exclusiveMax: true }, 'max-md');
  *     // ['2xl', 'xs', 'sm']
-*/
+ */
 export const tshirtRangeToSizes = <TBounds extends TshirtBounds>(
   bounds: TBounds,
   options?: TshirtRange | readonly TshirtRange[] | TshirtRangeOptions,
@@ -247,7 +280,7 @@ export const tshirtRangeToSizes = <TBounds extends TshirtBounds>(
   if (typeof options === 'string') {
     parsedRanges.push(options);
   } else if (Array.isArray(options)) {
-    parsedRanges.push(...options as TshirtRange[]);
+    parsedRanges.push(...(options as TshirtRange[]));
   } else if (typeof options === 'object' && options !== null) {
     parsedOptions = options as TshirtRangeOptions;
   } else if (options !== undefined) {
@@ -270,7 +303,11 @@ export const tshirtRangeToSizes = <TBounds extends TshirtBounds>(
 
   const allMatchedSizes: TshirtSize[] = [];
   for (const rangeString of parsedRanges) {
-    for (const size of _singleRangeToSizes(allSizes, rangeString, parsedOptions)) {
+    for (const size of _singleRangeToSizes(
+      allSizes,
+      rangeString,
+      parsedOptions,
+    )) {
       allMatchedSizes.push(size);
     }
   }

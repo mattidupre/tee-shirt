@@ -1,6 +1,11 @@
 import {expect, test} from 'vitest';
 import {
-  mapTshirtBreakpointsToCss, tshirtBreakpointRangeToInline, tshirtBreakpointRangeToSizes, tshirtBreakpointsToCss, tshirtBreakpointsToSizeTuple, type TshirtBreakpoints,
+  mapTshirtBreakpointsToCss,
+  tshirtBreakpointRangeToInline,
+  tshirtBreakpointRangeToSizes,
+  tshirtBreakpointsToCss,
+  tshirtBreakpointsToSizeTuple,
+  type TshirtBreakpoints,
 } from './query.js';
 
 // eslint-disable-next-line unicorn/prefer-string-replace-all
@@ -15,31 +20,54 @@ const MOCK_BREAKPOINTS = {
 const MOCK_PREFIX = 'mock';
 
 test('mapTshirtBreakpointsToCss', () => {
-  expect.soft(mapTshirtBreakpointsToCss(MOCK_BREAKPOINTS, 'min', (...arguments_) => String(arguments_)))
-    .toStrictEqual([
-      '@media (min-width: 640px) {sm,640}',
-      '@media (min-width: 1024px) {md,1024}',
-      '@media (min-width: 1280px) {lg,1280}',
-    ].join('\n'));
-  expect.soft(mapTshirtBreakpointsToCss(MOCK_BREAKPOINTS, 'max', (...arguments_) => String(arguments_)))
-    .toStrictEqual([
-      '@media (max-width: 640px) {sm,640}',
-      '@media (max-width: 1024px) {md,1024}',
-      '@media (max-width: 1280px) {lg,1280}',
-    ].join('\n'));
+  expect
+    .soft(
+      mapTshirtBreakpointsToCss(MOCK_BREAKPOINTS, 'min', (...arguments_) =>
+        String(arguments_),
+      ),
+    )
+    .toStrictEqual(
+      [
+        '@media (min-width: 640px) {sm,640}',
+        '@media (min-width: 1024px) {md,1024}',
+        '@media (min-width: 1280px) {lg,1280}',
+      ].join('\n'),
+    );
+  expect
+    .soft(
+      mapTshirtBreakpointsToCss(MOCK_BREAKPOINTS, 'max', (...arguments_) =>
+        String(arguments_),
+      ),
+    )
+    .toStrictEqual(
+      [
+        '@media (max-width: 640px) {sm,640}',
+        '@media (max-width: 1024px) {md,1024}',
+        '@media (max-width: 1280px) {lg,1280}',
+      ].join('\n'),
+    );
 });
 
 test('tshirtBreakpointsToSizeTuple', () => {
-  expect.soft(tshirtBreakpointsToSizeTuple(MOCK_BREAKPOINTS)).toStrictEqual(['sm', 'md', 'lg']);
+  expect
+    .soft(tshirtBreakpointsToSizeTuple(MOCK_BREAKPOINTS))
+    .toStrictEqual(['sm', 'md', 'lg']);
 });
 
 test('tshirtBreakpointRangeToSizes', () => {
-  expect.soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'min-md')).toStrictEqual(['md', 'lg']);
-  expect.soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'max-md')).toStrictEqual(['sm', 'md']);
+  expect
+    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'min-md'))
+    .toStrictEqual(['md', 'lg']);
+  expect
+    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'max-md'))
+    .toStrictEqual(['sm', 'md']);
 });
 
 test('tshirtBreakpointsToCss', () => {
-  expect.soft(trimInside(tshirtBreakpointsToCss(MOCK_BREAKPOINTS, MOCK_PREFIX))).toEqual(trimInside(`
+  expect
+    .soft(trimInside(tshirtBreakpointsToCss(MOCK_BREAKPOINTS, MOCK_PREFIX)))
+    .toEqual(
+      trimInside(`
 :root {
   --mock-min: 1;
   --mock-sm: 0;
@@ -70,9 +98,12 @@ test('tshirtBreakpointsToCss', () => {
     --mock-lg: 1;
   }
 }
-`));
+`),
+    );
 });
 
 test('tshirtBreakpointRangeToInline', () => {
-  expect.soft(tshirtBreakpointRangeToInline(MOCK_BREAKPOINTS, MOCK_PREFIX, 'sm-lg')).toEqual('');
+  expect
+    .soft(tshirtBreakpointRangeToInline(MOCK_BREAKPOINTS, MOCK_PREFIX, 'sm-lg'))
+    .toEqual('');
 });

@@ -1,6 +1,9 @@
 import {expect, test} from 'vitest';
 import {
-  isTshirtRangeMin, isTshirtRangeMax, tshirtRangeToSizes, isTshirtRangeSimple,
+  isTshirtRangeMin,
+  isTshirtRangeMax,
+  tshirtRangeToSizes,
+  isTshirtRangeSimple,
   isTshirtRange,
 } from './range.js';
 import {createTshirtTuple} from './size.js';
@@ -8,46 +11,71 @@ import {createTshirtTuple} from './size.js';
 const TSHIRT_TUPLE = createTshirtTuple(['2xs', '2xl']);
 
 test('tshirtRangeToSizes', () => {
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'all')).toStrictEqual(TSHIRT_TUPLE);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'all'))
+    .toStrictEqual(TSHIRT_TUPLE);
   expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'none')).toStrictEqual([]);
 
   expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'md')).toStrictEqual(['md']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'none', 'md')).toStrictEqual(['md']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md'])).toStrictEqual(['md']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'none', 'md'))
+    .toStrictEqual(['md']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md']))
+    .toStrictEqual(['md']);
 
   // TODO: The following two are a bit weird. Get rid of exclusive(Left|Right)?
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md', 'lg'])).toStrictEqual(['md', 'lg']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md-lg'])).toStrictEqual(['md']);
-
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-2xs'))
-    .toStrictEqual(['2xs']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-md'))
-    .toStrictEqual(['2xs', 'xs', 'sm', 'md']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveMax: true}, 'max-md'))
-    .toStrictEqual(['2xs', 'xs', 'sm']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, 'max-md'))
-    .toStrictEqual(['2xs', 'xs', 'sm']);
-
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'min-2xl'))
-    .toStrictEqual(['2xl']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'min-md'))
-    .toStrictEqual(['md', 'lg', 'xl', '2xl']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveMin: true}, 'min-md'))
-    .toStrictEqual(['lg', 'xl', '2xl']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveLeft: true}, 'min-md'))
-    .toStrictEqual(['lg', 'xl', '2xl']);
-
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'sm-lg'))
-    .toStrictEqual(['sm', 'md', 'lg']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveLeft: true}, 'sm-lg'))
+  expect
+    .soft(
+      tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md', 'lg']),
+    )
     .toStrictEqual(['md', 'lg']);
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, 'sm-lg'))
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md-lg']))
+    .toStrictEqual(['md']);
+
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-2xs'))
+    .toStrictEqual(['2xs']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-md'))
+    .toStrictEqual(['2xs', 'xs', 'sm', 'md']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveMax: true}, 'max-md'))
+    .toStrictEqual(['2xs', 'xs', 'sm']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, 'max-md'))
+    .toStrictEqual(['2xs', 'xs', 'sm']);
+
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'min-2xl'))
+    .toStrictEqual(['2xl']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'min-md'))
+    .toStrictEqual(['md', 'lg', 'xl', '2xl']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveMin: true}, 'min-md'))
+    .toStrictEqual(['lg', 'xl', '2xl']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveLeft: true}, 'min-md'))
+    .toStrictEqual(['lg', 'xl', '2xl']);
+
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'sm-lg'))
+    .toStrictEqual(['sm', 'md', 'lg']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveLeft: true}, 'sm-lg'))
+    .toStrictEqual(['md', 'lg']);
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, 'sm-lg'))
     .toStrictEqual(['sm', 'md']);
 
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'sm-md', 'xl-2xl'))
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'sm-md', 'xl-2xl'))
     .toStrictEqual(['sm', 'md', 'xl', '2xl']);
 
-  expect.soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-md'))
+  expect
+    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-md'))
     .toStrictEqual(['2xs', 'xs', 'sm', 'md']);
 });
 
