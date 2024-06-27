@@ -1,5 +1,6 @@
 {
   "space": true,
+  "prettier": true,
   "rules": {
     "capitalized-comments": "off",
     "@typescript-eslint/naming-convention": "off",
