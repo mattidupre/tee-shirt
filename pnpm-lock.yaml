@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  ts-arithmetic:
+    specifier: ^0.1.1
+    version: 0.1.1
   typescript:
     specifier: ^5.4.5
     version: 5.4.5
@@ -3750,6 +3753,10 @@ packages:
       typescript: '>=4.2.0'
     dependencies:
       typescript: 5.4.5
+    dev: true
+
+  /ts-arithmetic@0.1.1:
+    resolution: {integrity: sha512-3VqgsRgzaYfj+zKWn+7O66ifHwbOOnT2BoOrHwdEUBz7az0DetoZOS20+juNJh1klgzvWEi2Qxden41pomOUAQ==}
     dev: true
 
   /tsconfig-paths@3.15.0:
