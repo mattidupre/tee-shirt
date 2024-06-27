@@ -41,14 +41,14 @@ test('tshirtBreakpointRangeToSizes', () => {
 test('tshirtBreakpointsToCss', () => {
   expect.soft(trimInside(tshirtBreakpointsToCss(MOCK_BREAKPOINTS, MOCK_PREFIX))).toEqual(trimInside(`
 :root {
-  --mock-default: 1;
+  --mock-min: 1;
   --mock-sm: 0;
   --mock-md: 0;
   --mock-lg: 0;
 }
 @media (min-width: 640px) {
   :root {
-    --mock-default: 0;
+    --mock-min: 0;
     --mock-sm: 1;
     --mock-md: 0;
     --mock-lg: 0;
@@ -56,7 +56,7 @@ test('tshirtBreakpointsToCss', () => {
 }
 @media (min-width: 1024px) {
   :root {
-    --mock-default: 0;
+    --mock-min: 0;
     --mock-sm: 0;
     --mock-md: 1;
     --mock-lg: 0;
@@ -64,7 +64,7 @@ test('tshirtBreakpointsToCss', () => {
 }
 @media (min-width: 1280px) {
   :root {
-    --mock-default: 0;
+    --mock-min: 0;
     --mock-sm: 0;
     --mock-md: 0;
     --mock-lg: 1;
