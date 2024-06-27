@@ -1,4 +1,8 @@
-import {type ReverseTuple, type SuffixTupleValues, type WritableTuple} from './types/tuple.js';
+import {
+  type ReverseTuple,
+  type SuffixTupleValues,
+  type WritableTuple,
+} from './types/tuple.js';
 import type {
   IntegerRange,
   IntegerRangeTuple,
@@ -48,8 +52,8 @@ const parseMinMax = <
 };
 
 type SizeNumberTuple<TNumber extends SizeNumber> = IntegerRangeTuple<
-2,
-IntegerAdd<TNumber, 1>
+  2,
+  IntegerAdd<TNumber, 1>
 >;
 
 /**
@@ -86,10 +90,10 @@ export const parseTshirtSize = <
   }
 
   if (
-    sizeInt !== undefined
-    && !(
-      (sizeBase === 'xl' && sizeInt >= 2 && sizeInt <= max)
-      || (sizeBase === 'xs' && sizeInt >= 2 && sizeInt <= min)
+    sizeInt !== undefined &&
+    !(
+      (sizeBase === 'xl' && sizeInt >= 2 && sizeInt <= max) ||
+      (sizeBase === 'xs' && sizeInt >= 2 && sizeInt <= min)
     )
   ) {
     throw new TypeError(`Invalid size "${size}".`);
@@ -152,8 +156,8 @@ export const createTshirtSizes = <
   }
 
   return [...minSizes, ...BASE_SIZES, ...maxSizes] as CreateTshirtSizeTuple<
-  TNumberMin,
-  TNumberMax
+    TNumberMin,
+    TNumberMax
   >;
 };
 
@@ -172,25 +176,24 @@ export const createTshirtSizes = <
  * // 'min-lg',
  * // ]
  */
-export type TshirtSizesToRanges<
-  TTuple extends readonly TshirtSizeGeneric[],
-> = TTuple extends readonly [
-  infer T extends TshirtSizeGeneric,
-  ...infer TRest extends readonly TshirtSizeGeneric[],
-]
-  ? [
-      `max-${T}`,
-      ...(TTuple extends readonly [...any[]]
-        ? {
-          [K in keyof TTuple]: TTuple[K] extends number | string | bigint
-            ? `${T}-${TTuple[K]}`
-            : TTuple[K];
-        }
-        : never),
-      `min-${T}`,
-      ...TshirtSizesToRanges<TRest>,
+export type TshirtSizesToRanges<TTuple extends readonly TshirtSizeGeneric[]> =
+  TTuple extends readonly [
+    infer T extends TshirtSizeGeneric,
+    ...infer TRest extends readonly TshirtSizeGeneric[],
   ]
-  : []; // eslint-disable-line @typescript-eslint/ban-types
+    ? [
+        `max-${T}`,
+        ...(TTuple extends readonly [...any[]]
+          ? {
+              [K in keyof TTuple]: TTuple[K] extends number | string | bigint
+                ? `${T}-${TTuple[K]}`
+                : TTuple[K];
+            }
+          : never),
+        `min-${T}`,
+        ...TshirtSizesToRanges<TRest>,
+      ]
+    : []; // eslint-disable-line @typescript-eslint/ban-types
 
 /**
  * Given a tuple of sizes, create another tuple representing possible ranges.
@@ -220,7 +223,7 @@ export const tshirtSizesToRanges = <
 
   return [
     `max-${t1}`,
-    ...rest.map(t => `${t1}-${t}`),
+    ...rest.map((t) => `${t1}-${t}`),
     `min-${t1}`,
     ...tshirtSizesToRanges(rest),
   ] as TshirtSizesToRanges<TTuple>;
@@ -231,9 +234,9 @@ export const tshirtSizesToRanges = <
  */
 export type TshirtRangeGeneric = keyof {
   [T in TshirtSizeGeneric as
-  | `max-${T}`
-  | `${T}-${Exclude<TshirtSizeGeneric, T>}`
-  | `min-${T}`]: any;
+    | `max-${T}`
+    | `${T}-${Exclude<TshirtSizeGeneric, T>}`
+    | `min-${T}`]: any;
 };
 
 /**
@@ -278,16 +281,13 @@ export const tshirtRangesToSizes = <
 ): Array<TTshirtSizes[number]> => {
   const stepIndexes = new Set<number>();
   for (const range of tshirtRanges) {
-    const [fromIndex, toIndex] = tshirtRangeToIndexes(
-      allSizes,
-      range,
-    );
+    const [fromIndex, toIndex] = tshirtRangeToIndexes(allSizes, range);
     for (let index = fromIndex; index <= toIndex; index += 1) {
       stepIndexes.add(index);
     }
   }
 
-  return [...(stepIndexes)] // eslint-disable-line @typescript-eslint/require-array-sort-compare
+  return [...stepIndexes] // eslint-disable-line @typescript-eslint/require-array-sort-compare
     .sort()
-    .map(index => allSizes[index]);
+    .map((index) => allSizes[index]);
 };
