@@ -191,7 +191,8 @@ const _rangeToIndexRange = (
 };
 
 /**
- * Convert a single range to the respective sizes in the provided Tshirt size array.
+ * Convert a single range to the respective sizes
+ * in the provided Tshirt size array.
  * @private
  */
 const _singleRangeToSizes = <TSize extends TshirtSize>(

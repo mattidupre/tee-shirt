@@ -2,8 +2,17 @@
   "space": true,
   "prettier": true,
   "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 80
+      }
+    ],
     "capitalized-comments": "off",
     "@typescript-eslint/naming-convention": "off",
+    "unicorn/no-array-reduce": "off",
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/no-unsafe-return": "warn",
     "@typescript-eslint/ban-types": [
       "error",
       {

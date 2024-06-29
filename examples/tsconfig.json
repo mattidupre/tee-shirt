@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "tee-shirt": ["../src/index.ts"]
+    }
+  },
+  "include": ["./**/*.ts"]
+}

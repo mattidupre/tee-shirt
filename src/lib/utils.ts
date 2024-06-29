@@ -75,3 +75,46 @@ export const mapIntegerRange = <T>(
 
   return result;
 };
+
+export const lazy = function <T extends PropertyDescriptor>(
+  _: unknown,
+  __: unknown,
+  descriptor: T,
+) {
+  const initialValue = Symbol('initial-value');
+  let memoizedValue: unknown = initialValue;
+  const {get} = descriptor;
+  if (get) {
+    descriptor.get = function () {
+      if (memoizedValue === initialValue) {
+        memoizedValue = get.apply(this);
+      }
+
+      return memoizedValue;
+    };
+  }
+};
+
+export const mapArrayToObject = <
+  TArray extends readonly PropertyKey[],
+  TCallback extends (value: TArray[number], index: number) => unknown,
+>(
+  array: TArray,
+  callback: TCallback,
+) => {
+  const result = {} as Record<TArray[number], ReturnType<TCallback>>;
+  // eslint-disable-next-line unicorn/no-for-loop
+  for (let i = 0; i < array.length; i += 1) {
+    const key = array[i];
+    (result as Record<PropertyKey, unknown>)[key] = callback(key, i);
+  }
+
+  return result;
+};
+
+/**
+ * Trim all line breaks, tabs, and double spaces.
+ */
+export const trimInside = (string: string) =>
+  // eslint-disable-next-line unicorn/prefer-string-replace-all
+  string.replace(/\s+/g, ' ').trim();

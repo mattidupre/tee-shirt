@@ -10,8 +10,10 @@
     "moduleResolution": "Bundler",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
-    "baseUrl": ".",
-    "outDir": "./dist"
+    "types": ["vitest/globals"],
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "experimentalDecorators": true
   },
-  "files": ["./src/index.ts"]
+  "include": ["./src/**/*"]
 }

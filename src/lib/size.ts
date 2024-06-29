@@ -13,10 +13,6 @@ import {
   type Simplify,
 } from './utils.js';
 
-// type IsTuple<T> = T extends ReadonlyArray<any> ? number extends T['length'] ? 0 : 1 : 0;
-
-// type OnlyTuple<T> = T extends unknown ? IsTuple<T> extends 1 ? T : never : never;
-
 /**
  * The start or end value of {@link TshirtBounds}.
  * @private
@@ -270,7 +266,6 @@ const _parseBound = <T extends _Bound>(
  * Convert bounds containing sizes to numeric bounds.
  * @example ParseTshirtBounds<['xs', 'xl']>; // [-2, 2]
  */
-// export type ParseTshirtBounds<T extends _Bounds> = [_ParseBound<(OnlyTuple<T>)[0]>, _ParseBound<OnlyTuple<T>[1]>];
 export type ParseTshirtBounds<T extends TshirtBounds> = [
   _ParseBound<T[0]>,
   _ParseBound<T[Subtract<T['length'], 1>]>,
@@ -483,9 +478,11 @@ type _TshirtSizeToTuple<
   : TResult;
 
 /**
- * Converts a union type of values to a filtered and sorted tuple type of those Tshirt sizes.
- * Requires a sorted array created from {@link createTshirtTuple} as the first value.
- * @example TshirtSizeToTuple<'xs' | '2xs' | 'any' | 'xl' | 'md'> // ['2xs', 'xs', 'md', 'xl']
+ * Converts a union type of values to a filtered and sorted tuple type of those
+ * Tshirt sizes. Requires a sorted array created from {@link createTshirtTuple}
+ * as the firstvalue.
+ * @example TshirtSizeToTuple<[...sizes], 'xs' | '2xs' | 'any' | 'xl' | 'md'>
+ * // ['2xs', 'xs', 'md', 'xl']
  */
 export type TshirtSizeToTuple<
   TSizeTuple extends readonly TshirtSize[],
@@ -507,9 +504,11 @@ export const safeParseTshirtSizes = <
   >;
 
 /**
- * Converts a union type of values to a sorted and deduped tuple type of those Tshirt sizes.
- * Requires a sorted array created from {@link createTshirtTuple} as the first value.
- * @example TshirtSizeToTuple<'xs' | '2xs' | 'any' | 'xl' | 'md'> // ['2xs', 'xs', 'md', 'xl']
+ * Converts a partial array of values to a sorted and deduped array of those
+ * Tshirt sizes. Requires a sorted array created from {@link createTshirtTuple}
+ * as the first value.
+ * @example parseTshirtSizes['xs', '2xs', 'any', 'xl', 'md']
+ * // ['2xs', 'xs', 'md', 'xl']
  */
 export const parseTshirtSizes = <
   TSizeTupleAll extends readonly TshirtSize[],
@@ -556,7 +555,8 @@ type _TshirtRecordExact<
   Record<TSize, T>;
 
 /**
- * Records a value onto keys of every possible permutation of sizes within TBounds.
+ * Records a value onto keys of every possible permutation of sizes within
+ * TBounds.
  */
 export type TshirtRecord<TBounds extends TshirtBounds, T> =
   | {
