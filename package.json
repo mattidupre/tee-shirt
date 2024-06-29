@@ -4,28 +4,30 @@
   "version": "0.0.1",
   "license": "Unlicense",
   "engines": {
-    "node": ">=20",
     "pnpm": ">=8"
   },
   "sideEffects": false,
   "exports": {
     "./*": {
+      "require": "./dist/*.cjs",
       "import": "./dist/*.js",
       "types": "./dist/*.d.ts"
     },
     "./package.json": "./package.json"
   },
   "devDependencies": {
+    "ts-arithmetic": "^0.1.1",
+    "tsup": "^8.1.0",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0",
     "xo": "^0.58.0"
   },
   "scripts": {
-    "build": "tsc --declaration",
+    "build": "tsup ./src/index.ts --format esm,cjs --sourcemap --dts ",
     "clean": "rm -rf dist",
     "lint": "xo",
     "check-types": "tsc",
-    "dev": "tsc --declaration --watch",
+    "dev": "pnpm build --watch",
     "test": "vitest",
     "prepublishOnly": "pnpm clean && pnpm run build"
   }
