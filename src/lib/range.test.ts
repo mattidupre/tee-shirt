@@ -20,19 +20,6 @@ test('tshirtRangeToSizes', () => {
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'none', 'md'))
     .toStrictEqual(['md']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md']))
-    .toStrictEqual(['md']);
-
-  // TODO: The following two are a bit weird. Get rid of exclusive(Left|Right)?
-  expect
-    .soft(
-      tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md', 'lg']),
-    )
-    .toStrictEqual(['md', 'lg']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, ['md-lg']))
-    .toStrictEqual(['md']);
 
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-2xs'))
@@ -40,12 +27,6 @@ test('tshirtRangeToSizes', () => {
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'max-md'))
     .toStrictEqual(['2xs', 'xs', 'sm', 'md']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveMax: true}, 'max-md'))
-    .toStrictEqual(['2xs', 'xs', 'sm']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, 'max-md'))
-    .toStrictEqual(['2xs', 'xs', 'sm']);
 
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'min-2xl'))
@@ -53,22 +34,10 @@ test('tshirtRangeToSizes', () => {
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'min-md'))
     .toStrictEqual(['md', 'lg', 'xl', '2xl']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveMin: true}, 'min-md'))
-    .toStrictEqual(['lg', 'xl', '2xl']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveLeft: true}, 'min-md'))
-    .toStrictEqual(['lg', 'xl', '2xl']);
 
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'sm-lg'))
     .toStrictEqual(['sm', 'md', 'lg']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveLeft: true}, 'sm-lg'))
-    .toStrictEqual(['md', 'lg']);
-  expect
-    .soft(tshirtRangeToSizes(TSHIRT_TUPLE, {exclusiveRight: true}, 'sm-lg'))
-    .toStrictEqual(['sm', 'md']);
 
   expect
     .soft(tshirtRangeToSizes(TSHIRT_TUPLE, 'sm-md', 'xl-2xl'))

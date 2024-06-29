@@ -5,8 +5,16 @@ import {
   parseTshirtSizes,
   type TshirtRecord,
   type TshirtSizeBounds,
+  isTshirtSize,
 } from './size.js';
-import {type TshirtRange, tshirtRangeToSizes} from './range.js';
+import {
+  isTshirtRangeMax,
+  type TshirtRange,
+  type TshirtRangeMax,
+  type TshirtRangeMin,
+  type TshirtRangeSimple,
+  tshirtRangeToSizes,
+} from './range.js';
 
 const ALL_BREAKPOINTS_BOUNDS = [
   '2xs',
@@ -25,7 +33,13 @@ export type TshirtBreakpointBounds = [
 export type TshirtBreakpointValue = number | string;
 
 export type TshirtBreakpointRange<TBreakpoints extends TshirtBreakpoints> =
-  TshirtRange<TshirtBreakpointsToSizeTuple<TBreakpoints>>;
+  | 'all'
+  | 'none'
+  | 'min'
+  | keyof TBreakpoints
+  | TshirtRangeMin<TshirtBreakpointsToSizeTuple<TBreakpoints>>
+  | TshirtRangeMax<TshirtBreakpointsToSizeTuple<TBreakpoints>>
+  | TshirtRangeSimple<TshirtBreakpointsToSizeTuple<TBreakpoints>>;
 
 export type TshirtBreakpointsToSize<
   TBreakpoints extends TshirtBreakpoints = never,
@@ -83,11 +97,43 @@ export const tshirtBreakpointRangeToSizes = <
 >(
   breakpoints: TBreakpoints,
   ...ranges: ReadonlyArray<TshirtBreakpointRange<TBreakpoints>>
-) =>
-  tshirtRangeToSizes(
-    tshirtBreakpointsToSizeTuple(breakpoints),
-    ...(ranges as readonly TshirtRange[]),
-  ) as ReadonlyArray<keyof TBreakpoints>;
+) => {
+  let hasMin = false;
+  let hasAll = false;
+  const parsedRanges = ranges.flatMap((range) => {
+    if (range === 'all') {
+      hasAll = true;
+      return [];
+    }
+
+    if (range === 'none') {
+      return [];
+    }
+
+    if (range === 'min') {
+      hasMin = true;
+      return [];
+    }
+
+    if (isTshirtRangeMax(range)) {
+      hasMin = true;
+    }
+
+    return range;
+  });
+
+  if (hasAll) {
+    return ['min', ...tshirtBreakpointsToSizeTuple(breakpoints)];
+  }
+
+  return [
+    ...(hasMin ? ['min'] : []),
+    ...tshirtRangeToSizes(
+      tshirtBreakpointsToSizeTuple(breakpoints),
+      ...(parsedRanges as readonly TshirtRange[]),
+    ),
+  ] as ReadonlyArray<keyof TBreakpoints>;
+};
 
 export const mapTshirtBreakpointsToCss = <
   TBreakpoints extends TshirtBreakpoints,
@@ -152,7 +198,10 @@ export const tshirtBreakpointRangeToInline = <
 >(
   breakpoints: TBreakpoints,
   prefix: string,
-  range: TshirtBreakpointRange<TBreakpoints>,
+  ...ranges: ReadonlyArray<TshirtBreakpointRange<TBreakpoints>>
 ) => {
-  throw new Error('Here');
+  const sizes = tshirtBreakpointRangeToSizes(breakpoints, ...ranges);
+  return `calc(${sizes
+    .map((size) => `var(${createCssVariable(size, prefix)})`)
+    .join('+')})`;
 };

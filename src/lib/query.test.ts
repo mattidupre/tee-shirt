@@ -56,11 +56,20 @@ test('tshirtBreakpointsToSizeTuple', () => {
 
 test('tshirtBreakpointRangeToSizes', () => {
   expect
+    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'sm-lg'))
+    .toStrictEqual(['sm', 'md', 'lg']);
+  expect
+    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'sm-lg', 'all'))
+    .toStrictEqual(['min', ...Object.keys(MOCK_BREAKPOINTS)]);
+  expect
+    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'max-md'))
+    .toStrictEqual(['min', 'sm', 'md']);
+  expect
     .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'min-md'))
     .toStrictEqual(['md', 'lg']);
   expect
-    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'max-md'))
-    .toStrictEqual(['sm', 'md']);
+    .soft(tshirtBreakpointRangeToSizes(MOCK_BREAKPOINTS, 'min', 'sm', 'lg'))
+    .toStrictEqual(['min', 'sm', 'lg']);
 });
 
 test('tshirtBreakpointsToCss', () => {
@@ -105,5 +114,5 @@ test('tshirtBreakpointsToCss', () => {
 test('tshirtBreakpointRangeToInline', () => {
   expect
     .soft(tshirtBreakpointRangeToInline(MOCK_BREAKPOINTS, MOCK_PREFIX, 'sm-lg'))
-    .toEqual('');
+    .toEqual('calc(var(--mock-sm)+var(--mock-md)+var(--mock-lg))');
 });
